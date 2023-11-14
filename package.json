@@ -13,7 +13,7 @@
   "dependencies": {
     "ejs": "^3.1.5",
     "express": "^4.15.2",
-    "bodyparser": "*"
+    "bodyparser": "^1.20.2"
   },
   "devDependencies": {
     "got": "^11.3.0",

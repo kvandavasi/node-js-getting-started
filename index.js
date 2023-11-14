@@ -1,32 +1,19 @@
 const express = require('express');
 const path = require('path');
-const winston = require('winston');
+const bodyParser = require('body-parser');
 
 const PORT = process.env.PORT || 5001;
 
-const logger = winston.createLogger({
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.json() // This will format the log message as JSON
-  ),
-  transports: [new winston.transports.Console()],
-});
-
 express()
   .use(express.static(path.join(__dirname, 'public')))
-  .use(express.urlencoded({ extended: true }))
-  .use(express.json())
+  .use(bodyParser.text({ type: 'application/syslog' })) // Use body-parser to parse Syslog-formatted messages
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
   .get('/', (req, res) => res.render('pages/index'))
   .post('/body', (req, res) => {
-    // Log the request body in syslog format
-    logger.info({
-      message: 'Request Body Received',
-      requestBody: req.body,
-      // You can add more fields like timestamp, hostname, etc. as needed
-    });
+    // Log the Syslog-formatted messages
+    console.log('Syslog Message Received:', req.body);
 
-    res.send('Request Body Logged in Console');
+    res.send('Syslog Message Logged in Console');
   })
   .listen(PORT, () => console.log(`Listening on ${PORT}`));

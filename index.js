@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 5001;
 
 express()
   .use(express.static(path.join(__dirname, 'public')))
-  .use(bodyParser.text({ type: 'application/syslog' })) // Use body-parser to parse Syslog-formatted messages
+  .use(bodyParser.text({ type: 'application/logplex-1' })) // Use body-parser to parse the specified content type
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
   .get('/', (req, res) => res.render('pages/index'))

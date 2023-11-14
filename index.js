@@ -1,50 +1,18 @@
-
 const express = require('express');
 const path = require('path');
-const bodyParser = require('body-parser'); // Include body-parser
+const bodyParser = require('body-parser'); // Require body-parser for parsing POST request bodies
 
-const app = express();
 const PORT = process.env.PORT || 5001;
 
-// Use bodyParser to parse JSON requests
-app.use(bodyParser.json());
-
-app
+express()
   .use(express.static(path.join(__dirname, 'public')))
+  .use(bodyParser.urlencoded({ extended: true })) // Use body-parser middleware for parsing URL-encoded bodies
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
   .get('/', (req, res) => res.render('pages/index'))
-
-  // Endpoint for handling POST requests to /body
   .post('/body', (req, res) => {
-    const body = req.body;
-
-    // Assuming Syslog messages are in the request body
-    try {
-      const syslogMessages = parseSyslogMessages(body);
-      console.log('Received Syslog messages:');
-      syslogMessages.forEach((message, index) => {
-        console.log(`Message ${index + 1}: ${message}`);
-      });
-      res.status(200).send('Syslog messages processed successfully.');
-    } catch (error) {
-      console.error('Error processing Syslog messages:', error.message);
-      res.status(500).send('Internal Server Error');
-    }
-  });
-
-function parseSyslogMessages(syslogData) {
-  // Check if syslogData is a string
-  if (typeof syslogData !== 'string') {
-    throw new Error('Invalid Syslog data. Expected a string.');
-  }
-
-  // Implement your Syslog parsing logic here
-  // For simplicity, let's assume each line in the body is a separate Syslog message
-  return syslogData.split('\n').filter((message) => message.trim() !== '');
-}
-
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
-});
+    // Access the request body and print it
+    console.log('Request Body:', req.body);
+    res.send('Request Body Printed in Console'); // Send a response to the client
+  })
+  .listen(PORT, () => console.log(`Listening on ${PORT}`));

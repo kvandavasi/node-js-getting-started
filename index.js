@@ -33,8 +33,12 @@ app
     }
   });
 
-// Function to parse Syslog-formatted messages
 function parseSyslogMessages(syslogData) {
+  // Check if syslogData is a string
+  if (typeof syslogData !== 'string') {
+    throw new Error('Invalid Syslog data. Expected a string.');
+  }
+
   // Implement your Syslog parsing logic here
   // For simplicity, let's assume each line in the body is a separate Syslog message
   return syslogData.split('\n').filter((message) => message.trim() !== '');
